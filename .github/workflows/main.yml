@@ -45,7 +45,7 @@ jobs:
       - name: Test
         run: |
           echo ${{ steps.meta.outputs.tags }}
-          docker run --rm ${{ steps.meta.outputs.tags }} pytest
+          docker run --rm ${{ steps.meta.outputs.tags }} pytest -p no:cacheprovider
           docker run --rm ${{ steps.meta.outputs.tags }} ruff check . --no-cache
           docker run --rm ${{ steps.meta.outputs.tags }} mypy .
 

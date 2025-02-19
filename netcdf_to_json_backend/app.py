@@ -1,6 +1,8 @@
 import logging
 
-from fastapi import FastAPI, Request
+import httpx
+import netCDF4
+from fastapi import FastAPI
 from starlette_exporter import PrometheusMiddleware, handle_metrics
 
 logging.basicConfig(level=logging.INFO)
@@ -8,16 +10,37 @@ logging.basicConfig(level=logging.INFO)
 
 app = FastAPI()
 
-# app.add_middleware(RequestIdLoggingMiddleware)
 app.add_middleware(PrometheusMiddleware)
 app.add_route("/metrics", handle_metrics)
 
 
 @app.get("/")
-async def landing_page(request: Request):
+async def landing_page():
     return {}
 
 
 @app.get("/healthz")
 def healthz():
     return {"message": "All is OK!"}
+
+
+DATA_SOURCE = "https://thredds.met.no/thredds/fileServer/metusers/steingod/deside/climmodseaice-yearlymaxmin/siextentn/MIROC6_sea_ice/Daily/ssp460/siextentn_SIday_MIROC6_ssp460_r1i1p1f1_2015-2100.nc"
+
+
+@app.get("/data")
+async def le_data():
+    async with httpx.AsyncClient() as client:
+        response = await client.get(DATA_SOURCE)
+
+    response.raise_for_status()
+
+    ds = netCDF4.Dataset("in-mem-file", mode="r", memory=response.content)
+
+    # extract all data so we can zip it
+    data_by_var = [variable[:].tolist() for variable in ds.variables.values()]
+    data = [
+        # zip items back together with variable names
+        dict(zip(ds.variables.keys(), data_item, strict=True))
+        for data_item in zip(*data_by_var, strict=False)
+    ]
+    return {"data": data}

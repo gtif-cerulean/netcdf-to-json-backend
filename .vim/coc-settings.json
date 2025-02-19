@@ -1,0 +1,6 @@
+{
+  "[python][typescript][javascript]": {
+    "coc.preferences.formatOnSave": true
+  },
+  "ruff.autoFixOnSave": true
+}

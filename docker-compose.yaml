@@ -1,0 +1,8 @@
+services:
+  netcdf-to-json-backend:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./:/srv/service
+    command: gunicorn --bind=0.0.0.0:5000 --worker-class uvicorn.workers.UvicornWorker --workers=1 --threads=1 --log-level=DEBUG --reload netcdf-to-json-backend.app:app

@@ -1,0 +1,16 @@
+fastapi==0.115.8
+netCDF4==1.7.2
+httpx==0.28.1
+
+uvicorn==0.34.0
+gunicorn==23.0.0
+starlette_exporter==0.23.0
+
+# dev tooling
+pytest==8.3.4
+pytest-watch==4.2.0
+ruff==0.9.6
+mypy==1.15.0
+respx==0.22.0
+
+

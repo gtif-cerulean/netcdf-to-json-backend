@@ -1,4 +1,5 @@
 import logging
+from itertools import zip_longest
 
 import httpx
 import netCDF4
@@ -50,6 +51,6 @@ async def le_data(path: str):
     data = [
         # zip items back together with variable names
         dict(zip(ds.variables.keys(), data_item, strict=True))
-        for data_item in zip(*data_by_var, strict=False)
+        for data_item in zip_longest(*data_by_var, fillvalue=None)
     ]
     return {"data": data}

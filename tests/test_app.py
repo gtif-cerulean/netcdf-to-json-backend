@@ -25,3 +25,9 @@ def test_data_returns_data(client, mock_service_backend):
         "siextentn_min": 5.113038063049316,
         "siextentn_max": 12.644613265991211,
     }
+
+
+def test_data_fills_missing_values_with_none(client, mock_service_backend):
+    response = client.get("/data/a/b.nc")
+
+    assert response.json()["data"][9]["type"] is None

@@ -29,9 +29,6 @@ def healthz():
     return {"message": "All is OK!"}
 
 
-DATA_SOURCE = "https://thredds.met.no/thredds/fileServer/metusers/steingod/deside/climmodseaice-yearlymaxmin/siextentn/MIROC6_sea_ice/Daily/ssp460/siextentn_SIday_MIROC6_ssp460_r1i1p1f1_2015-2100.nc"
-
-
 @app.get("/data/{path:path}")
 async def le_data(path: str):
     # not sure if we need more validation, at least escaping from the domain

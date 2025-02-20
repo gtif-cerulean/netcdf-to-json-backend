@@ -46,6 +46,9 @@ jobs:
             
       - name: Test
         run: |
+          # NOTE: this is somewhat fragile because it relies on docker compose
+          # using the same image which was built above. Currently a rebuild is done,
+          # but everything is used from cache
           make test
           make lint
 

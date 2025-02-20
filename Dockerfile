@@ -14,4 +14,4 @@ ADD . .
 
 USER www-data
 
-CMD ["gunicorn", "--bind=0.0.0.0:8080", "--config", "gunicorn.conf.py", "--workers=3", "--log-level=INFO", "netcdf_to_json_backend.app:app"]
+CMD ["gunicorn", "--bind=0.0.0.0:8080", "--config", "gunicorn.conf.py", "--worker-class", "uvicorn.workers.UvicornWorker", "--workers=3", "--log-level=INFO", "netcdf_to_json_backend.app:app"]

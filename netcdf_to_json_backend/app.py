@@ -1,10 +1,11 @@
 import logging
 import time
+from http import HTTPStatus
 from itertools import zip_longest
 
 import httpx
 import netCDF4
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, HTTPException, Request
 from starlette_exporter import PrometheusMiddleware, handle_metrics
 
 from netcdf_to_json_backend import config
@@ -40,7 +41,16 @@ async def le_data(path: str):
     async with httpx.AsyncClient() as client:
         response = await client.get(url)
 
-    response.raise_for_status()
+    try:
+        response.raise_for_status()
+    except httpx.HTTPStatusError as e:
+        if e.response.status_code == HTTPStatus.NOT_FOUND:
+            raise HTTPException(
+                status_code=HTTPStatus.NOT_FOUND,
+                detail=f'Failed to find "{path}" in data source',
+            ) from e
+        else:
+            raise
 
     ds = netCDF4.Dataset("in-mem-file", mode="r", memory=response.content)
 

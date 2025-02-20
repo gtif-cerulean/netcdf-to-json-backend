@@ -47,9 +47,9 @@ jobs:
       - name: Test
         run: |
           echo ${{ steps.meta.outputs.tags }}
-          docker run --rm ${{ steps.meta.outputs.tags }} pytest -p no:cacheprovider
-          docker run --rm ${{ steps.meta.outputs.tags }} ruff check . --no-cache
-          docker run --rm ${{ steps.meta.outputs.tags }} mypy .
+          docker run --env-file ./test_environment.env --rm ${{ steps.meta.outputs.tags }} pytest -p no:cacheprovider
+          docker run --env-file ./test_environment.env --rm ${{ steps.meta.outputs.tags }} ruff check . --no-cache
+          docker run --env-file ./test_environment.env --rm ${{ steps.meta.outputs.tags }} mypy .
 
       - name: Push Docker image
         id: push

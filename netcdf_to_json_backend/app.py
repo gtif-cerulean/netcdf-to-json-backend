@@ -10,8 +10,6 @@ from starlette_exporter import PrometheusMiddleware, handle_metrics
 
 from netcdf_to_json_backend import config
 
-logging.basicConfig(level=logging.INFO)
-
 logger = logging.getLogger(__name__)
 
 app = FastAPI()
